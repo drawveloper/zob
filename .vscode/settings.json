@@ -1,5 +1,22 @@
 {
     "deno.enable": true,
     "deno.lint": true,
-    "deno.unstable": true
+    "deno.unstable": true,
+    "deno.suggest.imports.hosts": {
+        "https://l": false,
+        "https://path": false,
+        "https://d": false,
+        "https://denb": false,
+        "https://denn": false,
+        "https://deno": false,
+        "https://deno,l": false,
+        "https://deno.": false,
+        "https://deno.l": false,
+        "https://deno.lan": false,
+        "https://deno.land": true
+    },
+    "deno.codeLens.implementations": true,
+    "deno.codeLens.references": true,
+    "deno.codeLens.referencesAllFunctions": true,
+    "deno.suggest.completeFunctionCalls": true
 }

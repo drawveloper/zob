@@ -1,16 +1,21 @@
 import { cac } from "https://unpkg.com/cac/mod.ts";
+import { build } from "./build.ts";
+import { live } from "./live.ts";
 
-function zob(): void {
+function main(): void {
   const cli = cac("zob");
-  
-  cli.option("--type <type>", "Choose a project type", {
-    default: "deno",
-  });
 
-  const parsed = cli.parse();
-  console.log(JSON.stringify(parsed, null, 2));
+  cli
+    .command("build", "Build all posts into a blog")
+    .action(build);
+
+  cli
+    .command("live", "Reload changes automatically and serve locally")
+    .action(live);
+
+  cli.parse();
 }
 
 if (import.meta.main) {
-  zob();
+  main();
 }
