@@ -12,8 +12,8 @@ I hate file bloat in my repo. I get tired just from thinking of dealing with lay
 
 ### The accumulated layers of abstraction hinders first steps
 
-Try explaining to a friend who's curious about programming how your frontend setup works. They probably won't listen long enough to get to the `package.json`, and by `webpack` you've lost them. 
-When I was a kid, programming had much a more immediate positive feedback loop. I changed local HTML, reloaded the browser and saw the effects. I got hooked into it - that made me explore further. This is crucial for having more people join the field - making inclusive tools for beginners (and minimalists). I want to build tools that bring me back to that feeling of mesmerizing, iterative evolution. "First, do it". Doing the first thing, taking the first step must be simple. 
+Try explaining to a friend who's curious about programming how your frontend setup works. They probably won't listen long enough to get to `package.json`, and by `webpack` you've lost them. 
+When I was a kid, programming had much a more immediate positive feedback loop. I changed local HTML, reloaded the browser and saw the effects. I got hooked into it - that made me explore further. This is crucial for having more people join the field - having more inclusive tools for beginners (and minimalists). I want to build tools that bring me back to that feeling of mesmerizing, iterative evolution. "First, do it". Doing the first thing, taking the first step must be simple. 
 
 ### zob is free forever
 
@@ -22,10 +22,10 @@ You are welcome to fork it and do whatever you want.
 # How to zob
 
 ```sh
-$ deno install --allow-write --allow-read --name zob https://github.com/firstdoit/zob/cli.ts
+$ deno install --allow-write --allow-read --name zob https://raw.githubusercontent.com/firstdoit/zob/master/cli.ts
 ```
 
-Then, anywhere with a `posts` folder which contains `.md` files with frontmatter like:
+Then, anywhere with a `posts` folder which contains `.md` files with frontmatter containing `{title, date}`:
 
 ```md
 ---
@@ -58,6 +58,10 @@ $ zob live
 
 And going to `http://localhost:8080`. Changes to posts are recompiled immediately. 
 
-# Make it yours
+# Make it yours - customizing zob
 
-Add an `author.md` with your description.
+When running the first `zob build`, a default `public/index.html` is created. 
+
+Changes made to `public/index.html` will be respected - zob only touches the `<main/>` section in the middle of the document on each build. This means you can open `Developer Tools` in your browser and edit the file in your filesystem.
+
+Posts use `public/index.html` as a template. When the main index is changed, all posts must be recreated. This happens automatically on the next build, or immediately if `zob live` is running.
