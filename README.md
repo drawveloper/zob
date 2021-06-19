@@ -65,3 +65,19 @@ When running the first `zob build`, a default `public/index.html` is created.
 Changes made to `public/index.html` will be respected - zob only touches the `<main/>` section in the middle of the document on each build. This means you can open `Developer Tools` in your browser and edit the file in your filesystem.
 
 Posts use `public/index.html` as a template. When the main index is changed, all posts must be recreated. This happens automatically on the next build, or immediately if `zob live` is running.
+
+# How upgrading works
+
+If you want to get the latest version of `zob`, you can run the `upgrade` command.
+
+This will attempt to merge the latest default `index.html` with your changes before and after `<main/>` using `git merge-file`.
+
+# Theming
+
+You can upgrade *into* different *themes* - these are collections of files which will try to be merged into your structure under `public/`. You can use it by adding the `--repo` flag in the format `username/repo` for an arbitrary GitHub repository. (PROTIP: You can also specify a commit or branch like `username/repo#commit`)
+
+```sh
+$ zob upgrade --repo firstdoit/zob-simple-blog-theme
+```
+
+(This means we store the `index.html` used when first creating your blog in `.zob/firstdoit/zob/{#commit}/index.html` to use it as a common ancestor during diff.)
