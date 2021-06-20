@@ -4,16 +4,21 @@ A really minimal static blog generator that's about the content and the performa
 
 ### Why
 
-I want to remove all excuses to having a blog. So I built the simplest blog generator I could. Also, I want to code some deno.
+I want to remove all excuses to having a blog. Also, I want to code some deno. So I built the simplest blog generator I could. 
 
 ### ~JS~ everything fatigue
 
-I hate file bloat in my repo. I get tired just from thinking of dealing with layers of React and Gatsby and `node_modules`. I just want to convert some markdown into simple, performant static page that focuses brutally on the content - both for myself and for users. 
+I hate file bloat in my repo. I get tired just from thinking of dealing with layers of React and Gatsby and `node_modules`. I just want to convert some markdown into simple, performant static pages that focuses brutally on the content - both for myself and for users. 
+
+I also want to be able to edit my HTML, CSS and JS files directly using the advanced editors provided by current web browsers, without having to perform some advanced mapping configuration. It should be as simple and as straightforward as possible for beginners. 
 
 ### The accumulated layers of abstraction hinders first steps
 
 Try explaining to a friend who's curious about programming how your frontend setup works. They probably won't listen long enough to get to `package.json`, and by `webpack` you've lost them. 
-When I was a kid, programming had much a more immediate positive feedback loop. I changed local HTML, reloaded the browser and saw the effects. I got hooked into it - that made me explore further. This is crucial for having more people join the field - having more inclusive tools for beginners (and minimalists). I want to build tools that bring me back to that feeling of mesmerizing, iterative evolution. "First, do it". Doing the first thing, taking the first step must be simple. 
+
+When I was a kid, programming had much a more immediate positive feedback loop. I changed local HTML, refreshed the browser page and saw the effects. I got hooked into it - that made me explore further. This is crucial for having more people join the field - having more inclusive tools for beginners (and minimalists). 
+
+I want to build tools that bring me back to that feeling of mesmerizing, iterative evolution. "First, do it". Doing the first thing, taking the first step must be simple. 
 
 ### zob is free forever
 
@@ -21,11 +26,15 @@ You are welcome to fork it and do whatever you want.
 
 # How to zob
 
+First, you must have [deno](https://deno.land) installed. 
+
+Then, in your terminal:
+
 ```sh
-$ deno install --allow-write --allow-read --name zob https://raw.githubusercontent.com/firstdoit/zob/master/cli.ts
+$ deno install --allow-write --allow-read --unstable --name zob https://raw.githubusercontent.com/firstdoit/zob/master/cli.ts
 ```
 
-Then, anywhere with a `posts` folder which contains `.md` files with frontmatter containing `{title, date}`:
+Then, go anywhere with a `posts` folder which contains `.md` files with frontmatter containing `{title, date}`:
 
 ```md
 ---
@@ -62,7 +71,7 @@ And going to `http://localhost:8080`. Changes to posts are recompiled immediatel
 
 When running the first `zob build`, a default `public/index.html` is created. 
 
-Changes made to `public/index.html` will be respected - zob only touches the `<main/>` section in the middle of the document on each build. This means you can open `Developer Tools` in your browser and edit the file in your filesystem.
+Changes made to `public/index.html` will be respected - zob only touches the `<main/>` section in the middle of the document on each build. This means you can open `Developer Tools` in your browser and edit the file in your filesystem to your heart's content.
 
 Posts use `public/index.html` as a template. When the main index is changed, all posts must be recreated. This happens automatically on the next build, or immediately if `zob live` is running.
 
@@ -80,4 +89,6 @@ You can upgrade *into* different *themes* - these are collections of files which
 $ zob upgrade --repo firstdoit/zob-simple-blog-theme
 ```
 
-(This means we store the `index.html` used when first creating your blog in `.zob/firstdoit/zob/{#commit}/index.html` to use it as a common ancestor during diff.)
+# Local operational files
+
+- `zob` stores the `index.html` used when first creating your blog in `.zob/firstdoit/zob/{#commit}/index.html` to use it as a common ancestor during upgrades.

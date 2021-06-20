@@ -6,7 +6,7 @@ function main(): void {
   const cli = cac("zob");
 
   cli
-    .command("build", "Build all posts into a blog")
+    .command("build", "Build all posts into a blog in the public/ folder")
     .action(build);
 
   cli

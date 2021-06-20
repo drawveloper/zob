@@ -1,4 +1,7 @@
-export const indexHtmlFileContent = `
+import { posix } from "https://deno.land/std@0.99.0/path/mod.ts";
+
+export const indexFilePath = posix.resolve(`public/index.html`);
+export const indexHtmlFileContent = `<!-- built with zob -->
 <!DOCTYPE html>
 <html lang="en">
 <head>

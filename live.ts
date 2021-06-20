@@ -2,9 +2,9 @@ import {
   listenAndServe,
   Response,
   ServerRequest,
-} from "https://deno.land/std@0.98.0/http/server.ts";
-import { posix } from "https://deno.land/std@0.98.0/path/mod.ts";
-import { serveFile } from "https://deno.land/std@0.98.0/http/file_server.ts";
+} from "https://deno.land/std@0.99.0/http/server.ts";
+import { posix } from "https://deno.land/std@0.99.0/path/mod.ts";
+import { serveFile } from "https://deno.land/std@0.99.0/http/file_server.ts";
 
 const encoder = new TextEncoder();
 function normalizeURL(url: string): string {
