@@ -1,4 +1,3 @@
-import { indexFilePath, indexHtmlFileContent } from "./index.html.ts";
 import { ensureDir, exists } from "https://deno.land/std@0.99.0/fs/mod.ts";
 import { pLimit } from "https://deno.land/x/p_limit@v1.0.0/mod.ts";
 import {
@@ -11,34 +10,48 @@ import { parseFrontmatter } from "https://raw.githubusercontent.com/lumeland/lum
 
 // Turns out it's hard to get this in Deno.
 const limit = pLimit(8);
+const INDEX_PATH = "./public/index.html";
 
-async function checkOrCreateIndex() {
-  const indexExists = await exists(indexFilePath);
+async function checkOrReadIndex() {
+  const indexExists = await exists(INDEX_PATH);
   if (!indexExists) {
-    console.log("Creating default index.html");
-    await Deno.writeTextFile(indexFilePath, indexHtmlFileContent);
-    console.log(`🔨 ${indexFilePath}`);
+    console.log(
+      "Please create a public/index.html file. You can choose any from the templates folder.",
+    );
+    Deno.exit(1);
   }
+  const indexFile = await Deno.readTextFile(INDEX_PATH);
+  return indexFile;
 }
 
-async function buildPost(postFilePath: string) {
-  const postFileContent = await Deno.readTextFile(postFilePath);
-  const parsed = await parseFrontmatter(postFileContent) as Record<
-    string,
-    string
-  >;
-  console.log("parsed", parsed);
-  const postContent = parseMarkdown(parsed.content);
-  console.log(`📖 ${postFilePath}`);
-  const postBasename = basename(postFilePath);
-  console.log("postBasename:", postBasename);
-  const postIndexPath = postFilePath
-    .replace(postBasename, "index.html")
-    .replace("posts/", "public/");
-  await ensureDir(dirname(postIndexPath));
-  await Deno.writeTextFile(postIndexPath, postContent);
-  console.log(`🔨 ${postIndexPath}`);
-  return parsed;
+function extractLayout(indexContent: string) {
+  return ["header", "footer"];
+}
+
+function buildPostWithLayout(indexContent: string) {
+  const [header, footer] = extractLayout(indexContent);
+  return async (postFilePath: string) => {
+    const postFileContent = await Deno.readTextFile(postFilePath);
+    const parsed = await parseFrontmatter(postFileContent) as Record<
+      string,
+      string
+    >;
+    console.log("parsed", parsed);
+    const postContent = parseMarkdown(parsed.content);
+    const postWithLayout = `${header}${postContent}${footer}`;
+
+    console.log(`📖 ${postFilePath}`);
+    const postBasename = basename(postFilePath);
+    console.log("postBasename:", postBasename);
+    const postIndexPath = postFilePath
+      .replace(postBasename, "index.html")
+      .replace("posts/", "public/");
+    await ensureDir(dirname(postIndexPath));
+    await Deno.writeTextFile(postIndexPath, postWithLayout);
+
+    console.log(`🔨 ${postIndexPath}`);
+    return parsed;
+  };
 }
 
 async function findAllPosts(): Promise<string[]> {
@@ -59,17 +72,21 @@ async function findAllPosts(): Promise<string[]> {
   return posts;
 }
 
-async function parallelBuildPosts() {
-  const postList = await findAllPosts();
-  console.debug(postList);
+async function parallelBuildPosts(indexContent: string, postList: string[]) {
+  const buildPost = buildPostWithLayout(indexContent);
   const allPosts = postList.map((p) => limit(buildPost, p));
   await Promise.all(allPosts);
   console.log(`✅ All posts built successfully`);
-  // Update index <main/>
+}
+
+function updateListOnIndex(indexContent: string, postList: string[]) {
   console.log(`✅ Index updated successfully`);
 }
 
 export async function build() {
-  await checkOrCreateIndex();
-  await parallelBuildPosts();
+  const indexContent = await checkOrReadIndex();
+  const postList = await findAllPosts();
+  console.debug(postList);
+  await parallelBuildPosts(indexContent, postList);
+  await updateListOnIndex(indexContent, postList);
 }

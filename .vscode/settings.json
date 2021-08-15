@@ -16,10 +16,5 @@
         "https://deno.land": true
     },
     "deno.codeLens.implementations": true,
-    "deno.codeLens.references": true,
-    "deno.codeLens.referencesAllFunctions": true,
-    "deno.suggest.completeFunctionCalls": true,
-    "files.associations": {
-        "*.html.ts": "html"
-    }
+    "deno.suggest.completeFunctionCalls": true
 }
